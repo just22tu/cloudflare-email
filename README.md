@@ -59,6 +59,9 @@ NEXT_PUBLIC_AUTH_PASSWORD=your_password
 ```
 
 其中，`API基础地址`参考[Cloudflare Pages 前端](https://temp-mail-docs.awsl.uk/zh/guide/ui/pages.html)里面的`worker 域名为后端 api 的域名`
+
+
+
 `认证密码`就是[cloudflare_temp_email后端配置文件](https://temp-mail-docs.awsl.uk/zh/guide/cli/worker.html#%E4%BF%AE%E6%94%B9-wrangler-toml-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6)里面的ADMIN_PASSWORDS
 
 ### 本地开发
