@@ -34,7 +34,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
   useEffect(() => {
     setUrl(apiBaseUrl || process.env.NEXT_PUBLIC_API_BASE_URL || '')
     setToken(authToken || process.env.NEXT_PUBLIC_AUTH_TOKEN || '')
-    setApiKey(resendApiKey || '')
+    setApiKey(resendApiKey || process.env.NEXT_PUBLIC_RESEND_KEY || '')
   }, [apiBaseUrl, authToken, resendApiKey, open])
 
   const handleSave = () => {

@@ -96,7 +96,7 @@ export function SidebarNav({ onMobileClose }: SidebarNavProps) {
       </nav>
 
       {/* 底部设置按钮 */}
-      <div className="px-2 lg:px-3 py-4 border-t mt-auto">
+      {/* <div className="px-2 lg:px-3 py-4 border-t mt-auto">
         <Button
           variant="ghost"
           className="w-full justify-start gap-2 lg:gap-3 h-9 lg:h-10 rounded-lg font-normal text-sm lg:text-base"
@@ -109,16 +109,16 @@ export function SidebarNav({ onMobileClose }: SidebarNavProps) {
           <Settings className="h-4 w-4" />
           <span>设置</span>
         </Button>
-      </div>
+      </div> */}
 
       <CreateAddressDialog 
         open={showCreateDialog} 
         onOpenChange={setShowCreateDialog}
       />
-      <SettingsDialog
+      {/* <SettingsDialog
         open={showSettingsDialog}
         onOpenChange={setShowSettingsDialog}
-      />
+      /> */}
     </div>
   )
 } 

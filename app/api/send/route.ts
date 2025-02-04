@@ -4,7 +4,8 @@ import { Resend } from 'resend'
 export async function POST(request: Request) {
   try {
     // 从环境变量或请求头中获取 API key
-    const resendApiKey = request.headers.get('x-resend-api-key')
+    const resendApiKey = process.env.NEXT_PUBLIC_RESEND_KEY || ''
+
     if (!resendApiKey) {
       return NextResponse.json(
         { error: 'Resend API Key is required' },

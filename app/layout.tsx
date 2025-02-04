@@ -7,7 +7,7 @@ import '@/styles/quill.css'
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "CloudFlare邮件系统",
+  title: "EmailBox",
   description: "CloudFlare邮件系统",
   appleWebApp: {
     capable: true,
