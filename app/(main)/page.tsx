@@ -1,5 +1,8 @@
 "use client"
 
+import { useAuthStore } from "@/store/use-auth"
+import { useRouter } from "next/navigation"
+
 import { useEffect, useState, useCallback, useRef } from "react"
 import { HttpClient, Mail, MailsResponse } from "@/lib/http-client"
 import { MailList } from "@/components/mail/mail-list"
@@ -22,6 +25,10 @@ export default function MailContent() {
   const currentAddress = useAddressStore(state => state.currentAddress)
   const { apiBaseUrl, authToken } = useSettings()
 
+  const router = useRouter()
+  const token = useAuthStore(state => state.token)
+  const hydrated = useAuthStore(state => state.hydrated)
+  
   const fetchMails = useCallback(async (isLoadingMore = false) => {
     // 如果未配置 API，不执行请求
     if (!apiBaseUrl || !authToken) {
@@ -69,6 +76,11 @@ export default function MailContent() {
   }, [currentAddress, apiBaseUrl, authToken])
 
   useEffect(() => {
+    if (!hydrated) return
+    if (!token) {
+      router.push('/auth')
+      return
+    }
     if (!currentAddress) return
     if (!apiBaseUrl || !authToken) return
 
@@ -78,7 +90,7 @@ export default function MailContent() {
     setError(null)
     
     fetchMails()
-  }, [currentAddress, fetchMails, apiBaseUrl, authToken])
+  }, [token, router, hydrated, currentAddress, fetchMails, apiBaseUrl, authToken])
 
   // 渲染主要内容
   const renderContent = () => {
