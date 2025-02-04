@@ -280,6 +280,17 @@ export default function MailEditor() {
   return (
     <div className="h-full flex flex-col p-4 gap-3">
       <div className="grid gap-2 flex-none">
+        {/* 发件人 */}
+        <div className="grid grid-cols-[4rem,1fr] items-center">
+          <Label htmlFor="from" className="text-sm text-muted-foreground">发件人</Label>
+          <Input 
+            id="from"
+            value={currentAddress?.name}
+            disabled
+            className="bg-muted"
+          />
+        </div>
+
         {/* 收件人 */}
         <div className="grid grid-cols-[4rem,1fr] items-center">
           <Label htmlFor="to" className="text-sm text-muted-foreground">收件人</Label>
