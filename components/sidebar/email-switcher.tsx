@@ -11,7 +11,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { useEffect, useState, useRef, useMemo } from "react"
-import { ChevronDown, Search, Trash2 } from "lucide-react"
+import { ChevronDown, Search, Trash2, Settings as SettingsIcon } from "lucide-react"
 import { useAddressStore } from "@/store/use-address"
 import { HttpClient } from "@/lib/http-client"
 import { Input } from "@/components/ui/input"
@@ -21,6 +21,7 @@ import { cn } from "@/lib/utils"
 import { useToast } from "@/hooks/use-toast"
 import useSWR from 'swr'
 import { EmailAddress } from "@/lib/http-client"
+import { useSettings } from "@/store/use-settings"
 
 export function EmailSwitcher() {
   const { addresses, currentAddress, setAddresses, setCurrentAddress } = useAddressStore()
@@ -35,6 +36,7 @@ export function EmailSwitcher() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [addressToDelete, setAddressToDelete] = useState<EmailAddress | null>(null)
   const { mutate } = useSWR('/api/addresses')
+  const { apiBaseUrl, authToken } = useSettings()
 
   useEffect(() => {
     const fetchAddresses = async () => {
@@ -78,6 +80,28 @@ export function EmailSwitcher() {
     )
     return [allMailsOption, ...filtered]
   }, [addresses, search, allMailsOption])
+
+  if (!apiBaseUrl || !authToken) {
+    return (
+      <Button 
+        variant="ghost" 
+        className="w-full justify-between hover:bg-accent rounded-lg h-11 lg:h-14 px-2"
+        onClick={() => {
+          (document.querySelector('[data-settings-trigger="true"]') as HTMLElement)?.click()
+        }}
+      >
+        <div className="flex items-center gap-2 lg:gap-3 min-w-0">
+          <div className="shrink-0 w-7 h-7 lg:w-8 lg:h-8 rounded-full bg-muted text-muted-foreground grid place-items-center">
+            <SettingsIcon className="h-4 w-4" />
+          </div>
+          <span className="font-medium text-sm lg:text-base text-muted-foreground">
+            请配置 API
+          </span>
+        </div>
+        <ChevronDown className="h-4 w-4 opacity-50 shrink-0 ml-2" />
+      </Button>
+    )
+  }
 
   if (!currentAddress) return null
 

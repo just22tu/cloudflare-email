@@ -104,6 +104,7 @@ export function SidebarNav({ onMobileClose }: SidebarNavProps) {
             setShowSettingsDialog(true)
             onMobileClose?.()
           }}
+          data-settings-trigger="true"
         >
           <Settings className="h-4 w-4" />
           <span>设置</span>
