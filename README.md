@@ -2,20 +2,10 @@
 
 之前使用了[cloudflare_temp_email](https://github.com/dreamhunter2333/cloudflare_temp_email)部署了一个cloudflare邮箱，但是前端管理页面不是特别符合我的使用习惯，尤其是移动端，邮件查看基本没法用。所以用cursor撸了一个适合自己使用习惯的前端页面出来。
 
-## 预览
+## 体验地址
 
-### PC端
+[https://cloudflare-email.vercel.app/](https://cloudflare-email.vercel.app/)
 
-![PC端邮件列表](./screenshots/s1.png)
-![PC端切换邮箱](./screenshots/s2.png)
-![PC端新建邮箱](./screenshots/s3.png)
-
-### 移动端
-
-<div style="display: flex; gap: 10px;">
-  <img src="./screenshots/s11.png" width="200" alt="移动端邮件列表" />
-  <img src="./screenshots/s12.png" width="200" alt="移动端侧边栏" />
-</div>
 
 ## Vercel部署
 
@@ -42,6 +32,9 @@
 - ✨ 快速创建新邮箱
 - 🗑️ 删除确认保护
 - 🔍 邮箱搜索功能
+
+### 支持resend发送邮件
+- ✨ 配置resend的api key即可发送邮件
 
 ## 部署指南
 
