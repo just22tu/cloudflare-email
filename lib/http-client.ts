@@ -1,5 +1,5 @@
 import { processItem } from './email-parser'
-import { useAuthStore } from "@/store/use-auth"
+import { useSettings } from "@/store/use-settings"
 
 type RequestOptions = {
   method?: string
@@ -35,23 +35,23 @@ export interface MailsResponse {
 }
 
 export class HttpClient {
-  private static baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL
-  private static mailCounts: Record<string, number> = {} // 存储每个邮箱地址的邮件总数
+  private static mailCounts: Record<string, number> = {}
   private static mailCache: Map<string, MailsResponse> = new Map()
 
-  private static get authToken() {
-    try {
-      if (typeof window === 'undefined') return ''
-      return useAuthStore.getState().token || ''
-    } catch {
-      return ''
-    }
-  }
-
   private static async request<T>(endpoint: string, options: RequestOptions = {}): Promise<T> {
-    const url = `${this.baseUrl}${endpoint}`
+    const settings = useSettings.getState()
+    const baseUrl = settings.apiBaseUrl || process.env.NEXT_PUBLIC_API_BASE_URL
+    const authToken = settings.authToken || process.env.NEXT_PUBLIC_AUTH_TOKEN
+
+    // 确保 baseUrl 存在
+    if (!baseUrl) {
+      throw new Error('API base URL is not configured')
+    }
+
+    const url = `${baseUrl}${endpoint}`
     const headers = {
-      'x-admin-auth': this.authToken,
+      'Content-Type': 'application/json',
+      ...(authToken && { 'x-admin-auth': authToken }), // 只在有 token 时添加
       ...options.headers,
     }
 
@@ -63,15 +63,6 @@ export class HttpClient {
       })
 
       if (!response.ok) {
-        if (response.status === 401 && typeof window !== 'undefined') {
-          try {
-            useAuthStore.getState().clearToken()
-            window.location.href = '/auth'
-          } catch {
-            // 忽略可能的错误
-          }
-          throw new Error('Authentication failed')
-        }
         throw new Error(`HTTP error! status: ${response.status}`)
       }
 

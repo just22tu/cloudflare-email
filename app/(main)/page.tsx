@@ -3,22 +3,20 @@
 import { useEffect, useState, useCallback, useRef } from "react"
 import { HttpClient, Mail, MailsResponse } from "@/lib/http-client"
 import { MailList } from "@/components/mail/mail-list"
-import { useAuthStore } from "@/store/use-auth"
-import { useRouter } from "next/navigation"
 import { Inbox, Loader2 } from "lucide-react"
 import { useAddressStore } from "@/store/use-address"
 import { motion, AnimatePresence } from "framer-motion"
+import MailEditor from "@/components/mail/mail-editor"
+import { useMailView } from "@/store/use-mail-view"
 
 export default function MailContent() {
+  const { view } = useMailView()
   const [mails, setMails] = useState<Mail[]>([])
   const [loading, setLoading] = useState(true)
   const [loadingMore, setLoadingMore] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [hasMore, setHasMore] = useState(true)
   const offsetRef = useRef(0)
-  const router = useRouter()
-  const token = useAuthStore(state => state.token)
-  const hydrated = useAuthStore(state => state.hydrated)
   const currentAddress = useAddressStore(state => state.currentAddress)
 
   const fetchMails = useCallback(async (isLoadingMore = false) => {
@@ -62,11 +60,6 @@ export default function MailContent() {
   }, [currentAddress])
 
   useEffect(() => {
-    if (!hydrated) return
-    if (!token) {
-      router.push('/auth')
-      return
-    }
     if (!currentAddress) return
 
     setMails([])
@@ -75,66 +68,87 @@ export default function MailContent() {
     setError(null)
     
     fetchMails()
-  }, [token, router, hydrated, currentAddress, fetchMails])
+  }, [currentAddress, fetchMails])
 
-  if (loading) {
-    return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="flex flex-col items-center justify-center h-full text-muted-foreground"
-      >
-        <Loader2 className="h-12 w-12 mb-4 animate-spin" />
-        <p>加载邮件中...</p>
-      </motion.div>
-    )
-  }
+  // 渲染主要内容
+  const renderContent = () => {
+    switch (view) {
+      case 'compose':
+        return (
+          <div className="h-full p-4">
+            <h1 className="text-2xl font-bold mb-4">写邮件</h1>
+            <MailEditor />
+          </div>
+        )
+      case 'inbox':
+        if (loading) {
+          return (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex flex-col items-center justify-center h-full text-muted-foreground"
+            >
+              <Loader2 className="h-12 w-12 mb-4 animate-spin" />
+              <p>加载邮件中...</p>
+            </motion.div>
+          )
+        }
 
-  if (error) {
-    return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="flex items-center justify-center h-full text-destructive"
-      >
-        {error}
-      </motion.div>
-    )
-  }
+        if (error) {
+          return (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex items-center justify-center h-full text-destructive"
+            >
+              {error}
+            </motion.div>
+          )
+        }
 
-  if (!mails || mails.length === 0) {
-    return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="flex flex-col items-center justify-center h-full text-muted-foreground"
-      >
-        <Inbox className="h-12 w-12 mb-4" />
-        <p>没有邮件</p>
-      </motion.div>
-    )
+        if (!mails || mails.length === 0) {
+          return (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex flex-col items-center justify-center h-full text-muted-foreground"
+            >
+              <Inbox className="h-12 w-12 mb-4" />
+              <p>没有邮件</p>
+            </motion.div>
+          )
+        }
+
+        return (
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentAddress?.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.2 }}
+              className="h-full"
+            >
+              <MailList 
+                mails={mails} 
+                hasMore={hasMore}
+                loadingMore={loadingMore}
+                onLoadMore={() => fetchMails(true)}
+              />
+            </motion.div>
+          </AnimatePresence>
+        )
+      default:
+        return null
+    }
   }
 
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={currentAddress?.id}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -20 }}
-        transition={{ duration: 0.2 }}
-        className="h-full"
-      >
-        <MailList 
-          mails={mails} 
-          hasMore={hasMore}
-          loadingMore={loadingMore}
-          onLoadMore={() => fetchMails(true)}
-        />
-      </motion.div>
-    </AnimatePresence>
+    <div className="h-full">
+      {renderContent()}
+    </div>
   )
 } 

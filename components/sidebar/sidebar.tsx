@@ -49,7 +49,7 @@ export function Sidebar({ showHeader }: SidebarProps) {
       <div className="flex flex-col flex-1 overflow-hidden">
         {/* 导航菜单（可滚动区域） */}
         <div className="flex-1 overflow-y-auto">
-          <SidebarNav />
+          <SidebarNav onMobileClose={toggle} />
         </div>
       </div>
     </div>
