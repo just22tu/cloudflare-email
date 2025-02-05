@@ -2,10 +2,19 @@
 
 之前使用了[cloudflare_temp_email](https://github.com/dreamhunter2333/cloudflare_temp_email)部署了一个cloudflare邮箱，但是前端管理页面不是特别符合我的使用习惯，尤其是移动端，邮件查看基本没法用。所以用cursor撸了一个适合自己使用习惯的前端页面出来。
 
+## 前置要求
+使用cloudflare_temp_email后端，[点击这里查看部署教程](https://temp-mail-docs.awsl.uk/zh/guide/cli/worker.html)，部署好之后在使用本项目。
+
 ## 体验地址
 
 [https://cloudflare-email.vercel.app/](https://cloudflare-email.vercel.app/)
 
+### 参数配置
+API地址：
+![API地址](./screenshots/s1.png)
+
+认证令牌：
+![认证令牌](./screenshots/s2.png)
 
 ## Vercel部署
 
@@ -32,9 +41,6 @@
 - ✨ 配置resend的api key即可发送邮件
 
 ## 部署指南
-
-### 前置要求
-使用cloudflare_temp_email后端，[点击这里查看部署教程](https://temp-mail-docs.awsl.uk/zh/guide/cli/worker.html)，部署好之后在使用本项目。
 
 ### 环境要求
 - Node.js 18+
