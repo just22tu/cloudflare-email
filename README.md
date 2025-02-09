@@ -2,10 +2,19 @@
 
 之前使用了[cloudflare_temp_email](https://github.com/dreamhunter2333/cloudflare_temp_email)部署了一个cloudflare邮箱，但是前端管理页面不是特别符合我的使用习惯，尤其是移动端，邮件查看基本没法用。所以用cursor撸了一个适合自己使用习惯的前端页面出来。
 
+## 前置要求
+使用cloudflare_temp_email后端，[点击这里查看部署教程](https://temp-mail-docs.awsl.uk/zh/guide/cli/worker.html)，部署好之后在使用本项目。
+
 ## 体验地址
 
 [https://cloudflare-email.vercel.app/](https://cloudflare-email.vercel.app/)
 
+### 参数配置
+API地址：
+![API地址](./screenshots/s1.png)
+
+认证令牌：
+![认证令牌](./screenshots/s2.png)
 
 ## Vercel部署
 
@@ -28,11 +37,6 @@
 - ⚡️ 快速切换邮箱账号
 - 🔒 安全的 HTML 内容渲染
 
-### 邮箱管理
-- ✨ 快速创建新邮箱
-- 🗑️ 删除确认保护
-- 🔍 邮箱搜索功能
-
 ### 支持resend发送邮件
 - ✨ 配置resend的api key即可发送邮件
 
@@ -41,21 +45,6 @@
 ### 环境要求
 - Node.js 18+
 - 支持 WebAssembly 的环境
-
-### 环境变量
-```bash
-# API 基础地址
-NEXT_PUBLIC_API_BASE_URL=your_api_base_url
-
-# 认证密码
-NEXT_PUBLIC_AUTH_PASSWORD=your_password
-```
-
-其中，`API基础地址`参考[Cloudflare Pages 前端](https://temp-mail-docs.awsl.uk/zh/guide/ui/pages.html)里面的`worker 域名为后端 api 的域名`
-
-
-
-`认证密码`就是[cloudflare_temp_email后端配置文件](https://temp-mail-docs.awsl.uk/zh/guide/cli/worker.html#%E4%BF%AE%E6%94%B9-wrangler-toml-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6)里面的ADMIN_PASSWORDS
 
 ### 本地开发
 
